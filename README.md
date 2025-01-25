@@ -1,5 +1,10 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+This is a proof of concept application to showcase an AI chatbot assistant helping plan and book an appointment.
+
+<img width="1473" alt="Screenshot 2025-01-25 at 1 26 35 AM" src="https://github.com/user-attachments/assets/7dca619f-dd39-4545-87e1-66eca6154768" />
+
+
 ### Prerequisites
 - OpenAI api key (or equivalent)
 - SMTP credentials (see https://ethereal.email/create for free smtp credentials)
