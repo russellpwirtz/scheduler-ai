@@ -23,6 +23,8 @@
 # misc
 .DS_Store
 *.pem
+*.mp4
+Model Evaluation*.png
 
 # debug
 npm-debug.log*

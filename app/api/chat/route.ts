@@ -8,8 +8,8 @@ export async function POST(req: Request) {
 //   console.log('Received messages:', body.messages);
   
   try {
-    const { messages } = body;
-    const response = await openaiService.createChatCompletion(messages);
+    const { messages, model } = body;
+    const response = await openaiService.createChatCompletion(messages, model);
     
     return NextResponse.json({ response });
     

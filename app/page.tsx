@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from './styles.module.css';
 import { MessageBubble } from '../components/MessageBubble';
 import { AvailabilityPanel } from '../components/AvailabilityPanel';
@@ -8,6 +8,7 @@ import { Header } from '../components/Header';
 import Confetti from 'react-confetti';
 import availabilityData from '../config/availability.json';
 import systemPrompt from '../config/system-prompt.json';
+import { useSearchParams } from 'next/navigation';
 
 export default function Home() {
   const [input, setInput] = useState('');
@@ -20,6 +21,8 @@ export default function Home() {
   const [availability, setAvailability] = useState<Record<string, any>>({});
   const [hasShownConfetti, setHasShownConfetti] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const searchParams = useSearchParams();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setAvailability(availabilityData);
@@ -41,11 +44,19 @@ export default function Home() {
       JSON.stringify(availabilityData, null, 2)
     ].join('\n');
 
-    setMessages(prev => [{
-      content: formattedPrompt,
-      role: 'system' as const,
-      timestamp: new Date()
-    }, ...prev]);
+    setMessages(prev => [
+      {
+        content: formattedPrompt,
+        role: 'system' as const,
+        timestamp: new Date()
+      },
+      {
+        content: "Hi! I'm your scheduling assistant. I can help you book appointments with our team based on their availability. 🗓️",
+        role: 'assistant' as const,
+        timestamp: new Date()
+      },
+      ...prev
+    ]);
   }, []);
 
   useEffect(() => {
@@ -68,6 +79,13 @@ export default function Home() {
       return () => clearTimeout(timer);
     }
   }, [messages, hasShownConfetti]);
+
+  // Add this effect for auto-scrolling
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -97,7 +115,8 @@ export default function Home() {
           ].map(msg => ({
             role: msg.role,
             content: msg.content
-          }))
+          })),
+          model: searchParams?.get('model') || 'chatgpt-4o-latest'
         })
       });
       const data = await res.json();
@@ -160,7 +179,15 @@ export default function Home() {
       <Header title="Scheduler Bot" />
       
       <main className={styles.mainContent}>
-        <div className={styles.responseScrollContainer}>
+        <div 
+          className={styles.responseScrollContainer} 
+          ref={scrollContainerRef}
+        >
+          <div className={styles.introHeader}>
+            <h2>Schedule with Ease</h2>
+            <p>Chat with our AI assistant to find and book available time slots</p>
+          </div>
+          
           {messages
             .filter(msg => msg.role !== 'system')
             .map((message, index) => (
