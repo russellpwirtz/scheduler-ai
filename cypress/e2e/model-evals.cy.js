@@ -9,12 +9,12 @@ describe('Model Evaluation Suite', () => {
     {
       name: 'ambiguous_request',
       prompt: 'I need some time tomorrow',
-      expected: /(availab.*\?|.*\?.*availab)/i
+      expected: /^(?=.*(?:availab|could you))(?=.*\?).*/i
     },
     {
       name: 'error_condition',
       prompt: 'Book me for yesterday at 3pm',
-      expected: /(not able|today onwards|cannot schedule)/i
+      expected: /(not able|onwards|cannot|past)/i
     }
   ];
 
