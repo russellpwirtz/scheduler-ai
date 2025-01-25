@@ -20,7 +20,10 @@ export function MessageBubble({
     <div className={`${styles.messageBubble} ${
       isUser ? styles.userMessage : styles.botMessage
     }`}>
-      <p className={styles.messageText}>
+      <p 
+        className={styles.messageText}
+        data-testid="message-content"
+      >
         {message.content.replace(
           /!schedule\([^)]+\)/g, 
           '[BOOKING SCHEDULED]'
