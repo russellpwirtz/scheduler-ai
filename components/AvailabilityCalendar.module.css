@@ -1,0 +1,27 @@
+.calendarContainer {
+  margin-bottom: 2rem;
+}
+
+.calendarTitle {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: var(--accent-color);
+}
+
+.timeSlots {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.timeSlot {
+  background: var(--time-slot-bg);
+  padding: 0.8rem;
+  border-radius: 6px;
+  border-left: 4px solid var(--accent-color);
+  color: #333333;
+}
+
+.timeRange {
+  font-size: 0.9rem;
+  color: #444444;
+} 
