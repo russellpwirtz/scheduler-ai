@@ -30,6 +30,14 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Testing
+
+The project includes a comprehensive test suite with the following commands:
+
+```bash
+# Run end-to-end tests interactively (Cypress)
+npm run test:e2e
+```
 
 ## Docker 
 

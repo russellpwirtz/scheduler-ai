@@ -152,7 +152,11 @@ export default function Home() {
 
   return (
     <div className={styles.layoutContainer}>
-      {showConfetti && <Confetti recycle={false} numberOfPieces={500} />}
+      {showConfetti && <Confetti 
+        recycle={false} 
+        numberOfPieces={500} 
+        data-testid="confetti-canvas" 
+      />}
       <Header title="Scheduler Bot" />
       
       <main className={styles.mainContent}>

@@ -17,6 +17,7 @@ export function MessageInputForm({
     <div className={styles.formContainer}>
       <form onSubmit={onSubmit} className={styles.form}>
         <input
+          data-testid="message-input"
           value={input}
           onChange={(e) => onInputChange(e.target.value)}
           placeholder="Type your message..."
@@ -24,6 +25,7 @@ export function MessageInputForm({
           disabled={isLoading || !hasAvailability}
         />
         <button
+          data-testid="submit-button"
           type="submit"
           disabled={isLoading || !hasAvailability}
           className={styles.submitButton}
