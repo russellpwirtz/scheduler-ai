@@ -10,14 +10,14 @@ export class OpenAIService {
     });
   }
 
-  async createChatCompletion(messages: any[], model: string = 'gpt-3.5-turbo') {
+  async createChatCompletion(messages: any[], model: string = 'chatgpt-4o-latest') {
     // console.log('Creating chat completion with messages:', messages);
     try {
       const completion = await this.client.chat.completions.create({
         messages,
         model,
       });
-    //   console.log('Chat completion created successfully:', completion);
+      console.log('Chat completion created successfully:', completion);
       return completion.choices[0].message.content;
     } catch (error) {
       console.error('OpenAI API Error:', error);

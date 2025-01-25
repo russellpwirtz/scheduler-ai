@@ -16,7 +16,10 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error('Processing error:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to process message' },
+      { 
+        error: error instanceof Error ? error.message : 'Failed to process message',
+        ...(error instanceof Error && { details: error.cause })
+      },
       { status: 500 }
     );
   }

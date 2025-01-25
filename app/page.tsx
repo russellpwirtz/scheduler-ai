@@ -13,7 +13,7 @@ export default function Home() {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Array<{ 
     content: string; 
-    role: 'user' | 'bot' | 'system';
+    role: 'user' | 'assistant' | 'system';
     timestamp: Date;
   }>>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -102,15 +102,20 @@ export default function Home() {
       });
       const data = await res.json();
       
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to get bot response', { cause: data.details });
+      }
+
       const botMessage = {
-        content: data.response,
-        role: 'bot' as const,
-        timestamp: new Date()
+        content: data.response ?? 'No response from server',
+        role: 'assistant' as const,
+        timestamp: new Date(),
+        error: data.error ? data.error : undefined
       };
       setMessages(prev => [...prev, botMessage]);
 
       // Send email notification if booking occurred
-      if (botMessage.content.includes('!schedule(')) {
+      if (botMessage.content?.includes('!schedule(')) {
         const match = botMessage.content.match(/!schedule\(([^,]+),/);
         if (match) {
           const workerName = match[1];
@@ -128,6 +133,18 @@ export default function Home() {
           }
         }
       }
+    } catch (error) {
+      const errorMessage = error instanceof Error 
+        ? `${error.message}${error.cause ? ` (${error.cause})` : ''}`
+        : 'Failed to process message';
+
+      const botMessage = {
+        content: `Error: ${errorMessage}`,
+        role: 'assistant' as const,
+        timestamp: new Date(),
+        error: error instanceof Error ? error.message : undefined
+      };
+      setMessages(prev => [...prev, botMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -147,10 +164,10 @@ export default function Home() {
                 key={index}
                 message={{
                   ...message,
-                  content: message.content.replace(
+                  content: message.content?.replace(
                     /!schedule\([^)]+\)/g, 
                     '[BOOKING SCHEDULED]'
-                  )
+                  ) ?? 'Error loading message content'
                 }}
                 isUser={message.role === 'user'}
               />
